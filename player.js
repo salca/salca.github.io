@@ -29,7 +29,7 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
     duckState: false,
     flip: false,
     // textAtWalk: new textureAtlas(walk,[84,87,84,87],120),
-    textAtWalk: new textureAtlas(skeleani,[31,44,26,44],108),
+    textAtWalk: new textureAtlas(skeleani,[31*4,44*4,26*4,44*4],108*4),
     textAtJump: new textureAtlas(jump,[48,102,144],153),
 
     draw(dt){

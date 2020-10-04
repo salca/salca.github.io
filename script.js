@@ -5,8 +5,9 @@ const width = window.innerWidth/zoom
 const height = window.innerHeight/zoom
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
-// canvas.style.transform = `scale(${zoom})`
-// canvas.style.transformOrigin = 'top left'
+dpi = window.devicePixelRatio;
+canvas.style.transform = `scale(${zoom})`
+canvas.style.transformOrigin = 'top left'
 var plats = []
 const odboj = -0.5*0
 const maxyspeed = 500
@@ -19,7 +20,7 @@ const jumpg = 700
 const jumpSpeed = 500
 const vodaJumpSpeed = -0.05
 const fric = 1.025
-const playerSize = 10
+const playerSize = 1
 const walkAniSpeed = 2e-2
 const vzgon = 0.5;
 const vodaUpor = 0.0008;
@@ -37,11 +38,7 @@ var leftWallJump = false
 var rightWallJump = false
 var wallJumpTimer = 0
 var JumpTimer = 0
-ctx.imageSmoothingEnabled       = false;
-ctx.webkitImageSmoothingEnabled = false;
-ctx.mozImageSmoothingEnabled    = false;
-ctx.msImageSmoothingEnabled     = false;
-ctx.oImageSmoothingEnabled      = false;
+// ctx.imageSmoothingEnabled = false;
 
 
 // document.body.style.overflow = "hidden"
@@ -57,6 +54,7 @@ var frontPos = {}
 var enemies = []
 var water = []
 var backTiles = []
+
 
 function sumOfArray(arr,start,end){
   return arr.slice(start,end).reduce((a,b)=>a+b,0)
@@ -195,11 +193,11 @@ function clearCanvas(){
 
 function draw(dt){
   clearCanvas()
+  // fix_dpi()
   drawBackground(dt)
   for (i in backTiles){
     backTiles[i].draw()
   }
-  player.draw(dt)
   hand.draw()
   for (i in enemies){
     if (enemies[i].dead) {continue}
@@ -208,10 +206,11 @@ function draw(dt){
   for (i in plats){
     plats[i].drawPlatform()
   }
+  player.draw(dt)
   for (i in water){
     water[i].draw();
   }
-  drawFront(dt)
+  // drawFront(dt)
 }
 
 
