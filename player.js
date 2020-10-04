@@ -68,12 +68,12 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
       this.r.add(this.v.times(dt))
       if (this.v.x > 0) {this.flip=false}
       else if (this.v.x < 0) {this.flip=true}
-      document.getElementById('boxX').innerHTML=this.r.x.toFixed(2)
-      document.getElementById('boxY').innerHTML=this.r.y.toFixed(2)
-      document.getElementById('boxvX').innerHTML=this.v.x.toFixed()
-      document.getElementById('boxvY').innerHTML=this.v.y.toFixed()
-      document.getElementById('boxFX').innerHTML=this.F.x.toFixed()
-      document.getElementById('boxFY').innerHTML=this.F.y.toFixed()
+      // document.getElementById('boxX').innerHTML=this.r.x.toFixed(2)
+      // document.getElementById('boxY').innerHTML=this.r.y.toFixed(2)
+      // document.getElementById('boxvX').innerHTML=this.v.x.toFixed()
+      // document.getElementById('boxvY').innerHTML=this.v.y.toFixed()
+      // document.getElementById('boxFX').innerHTML=this.F.x.toFixed()
+      // document.getElementById('boxFY').innerHTML=this.F.y.toFixed()
     },
     force(dt){
       this.v.add(this.F.times(dt/this.m))

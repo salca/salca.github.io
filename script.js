@@ -1,8 +1,8 @@
 const zoom = 1;
-const width = 700;
-const height = 700;
-// const width = screen.width
-// const height = screen.height
+// const width = 700;
+// const height = 700;
+const width = window.innerWidth/zoom
+const height = window.innerHeight/zoom
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 canvas.style.transform = `scale(${zoom})`
