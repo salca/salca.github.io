@@ -1,4 +1,4 @@
-const zoom = 1;
+const zoom = 1.25;
 // const width = 700;
 // const height = 700;
 const width = window.innerWidth/zoom
@@ -26,7 +26,7 @@ const vodaUpor = 0.0008;
 const handRange = 200;
 var inverseParalaksa = false
 var jumpState = 0
-var centerLoc = 0
+var centerLoc = V(0,0)
 var playerPosold = V(0,0)
 // document.body.style.overflow = "hidden"
 
@@ -69,29 +69,29 @@ function sound(src) {
 
 function drawFront(dt){
   for (i in frontPos) {
-    frontPos[i] += paralaksa[i]*player.v.x*dt
+    frontPos[i].add(V(player.v.x*paralaksa[i]*dt,player.v.y*dt))
     if (player.r.x - frontPos[i] > background[i].width) {
       frontPos[i] += background[i].width}
     else if (player.r.x - frontPos[i] < 0) {
       frontPos[i] -= background[i].width
     }
-    ctx.drawImage(background[i],frontPos[i],0)
-    ctx.drawImage(background[i],frontPos[i]-background[i].width,0)
-    ctx.drawImage(background[i],frontPos[i]+background[i].width,0)
+    ctx.drawImage(background[i],frontPos[i].x,frontPos[i].y)
+    ctx.drawImage(background[i],frontPos[i].x-background[i].width,frontPos[i].y)
+    ctx.drawImage(background[i],frontPos[i].x+background[i].width,frontPos[i].y)
   }
 }
 
 function drawBackground(dt){
   for (i in backgroundPos) {
-    backgroundPos[i] += paralaksa[i]*player.v.x*dt
+    backgroundPos[i].add(V(player.v.x*paralaksa[i]*dt,player.v.y*dt))
     if (player.r.x - backgroundPos[i] > background[i].width) {
       backgroundPos[i] += background[i].width}
     else if (player.r.x - backgroundPos[i] < 0) {
       backgroundPos[i] -= background[i].width
     }
-    ctx.drawImage(background[i],backgroundPos[i],0)
-    ctx.drawImage(background[i],backgroundPos[i]-background[i].width,0)
-    ctx.drawImage(background[i],backgroundPos[i]+background[i].width,0)
+    ctx.drawImage(background[i],backgroundPos[i].x,backgroundPos[i].y)
+    ctx.drawImage(background[i],backgroundPos[i].x-background[i].width,backgroundPos[i].y)
+    ctx.drawImage(background[i],backgroundPos[i].x+background[i].width,backgroundPos[i].y)
   }
   
 }
@@ -126,8 +126,8 @@ function checkCollisonbool(){
 }
 
 function centerScreen(dt){
-  ctx.translate(-player.v.x*dt,0)
-  centerLoc += player.v.x*dt
+  ctx.translate(-player.v.x*dt,-player.v.y*dt)
+  centerLoc.add(player.v.times(dt))
 }
 
 // function centerScreen(dt){
@@ -143,7 +143,7 @@ function reset(){
   player.r = V(width/2,200)
   player.v = V(0,0)
   ctx.resetTransform()
-  centerLoc = 0
+  centerLoc = V(0,0)
   for (i in backgroundPos) {
     backgroundPos[i] = 0
   }
@@ -169,7 +169,8 @@ function drawRectangle({r,a,b,fillColor,edgeColor}){
 }
 
 function clearCanvas(){
-  ctx.clearRect(centerLoc,0,width,height)
+  console.log(centerLoc.x,centerLoc.y)
+  ctx.clearRect(centerLoc.x,centerLoc.y,width,height)
 }
 
 
@@ -234,15 +235,15 @@ function setupSound(){
 
 function setupImages(){
   background.back1=document.getElementById('back1')
-  backgroundPos.back1 = 0
+  backgroundPos.back1 = V(0,0)
   background.back2=document.getElementById('back2')
-  backgroundPos.back2 = 0
+  backgroundPos.back2 = V(0,0)
   background.back3=document.getElementById('back3')
-  backgroundPos.back3 = 0
+  backgroundPos.back3 = V(0,0)
   background.back4=document.getElementById('back4')
-  backgroundPos.back4 = 0
+  backgroundPos.back4 = V(0,0)
   background.front=document.getElementById('front')
-  frontPos.front = 0
+  frontPos.front = V(0,0)
   tileR=document.getElementById('tileR')
   tileC=document.getElementById('tileC')
   tileL=document.getElementById('tileL')
@@ -288,7 +289,7 @@ function setupLevel(){
 }
 
 function setup(){
-  player = createPlayer({r:V(width/2,200),a:28*3*playerSize,b:40*3*playerSize,fillColor:'black'})
+  player = createPlayer({r:V(width/2,height/2),a:28*3*playerSize,b:40*3*playerSize,fillColor:'black'})
   setupImages()
   setupLevel()
   setupSound()
