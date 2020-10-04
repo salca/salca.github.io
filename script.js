@@ -1,4 +1,4 @@
-const zoom = 1
+const zoom = 1.25
 // const width = 700;
 // const height = 700;
 const width = window.innerWidth/zoom
@@ -19,13 +19,15 @@ const jumpg = 700
 const jumpSpeed = 500
 const vodaJumpSpeed = -0.05
 const fric = 1.025
-const playerSize = 0.75
+const playerSize = 2
 const walkAniSpeed = 2e-2
 const vzgon = 0.5;
 const vodaUpor = 0.0008;
 const handRange = 200;
 const wallJump = V(300, -500)
-const wallJumpTime = 1
+const wallJumpTime = 0.1
+const yparalask = 1
+const jumpTime = 0.1
 var inverseParalaksa = false
 var jumpState = 0
 var centerLoc = V(0,0)
@@ -34,6 +36,9 @@ var dr = V(0,0)
 var leftWallJump = false
 var rightWallJump = false
 var wallJumpTimer = 0
+var JumpTimer = 0
+
+
 // document.body.style.overflow = "hidden"
 
 canvas.width = width
@@ -75,7 +80,7 @@ function sound(src) {
 
 function drawFront(dt){
   for (i in frontPos) {
-    frontPos[i].add(V(dr.x*paralaksa[i],dr.y*paralaksa[i]/2))
+    frontPos[i].add(V(dr.x*paralaksa[i],dr.y*paralaksa[i]*yparalask))
     if (player.r.x - frontPos[i].x > background[i].width) {
       frontPos[i].x += background[i].width}
     else if (player.r.x - frontPos[i].x < 0) {
@@ -89,7 +94,7 @@ function drawFront(dt){
 
 function drawBackground(dt){
   for (i in backgroundPos) {
-    backgroundPos[i].add(V(dr.x*paralaksa[i],dr.y*paralaksa[i]/2))
+    backgroundPos[i].add(V(dr.x*paralaksa[i],dr.y*paralaksa[i]*yparalask))
     if (player.r.x - backgroundPos[i].x > background[i].width) {
       backgroundPos[i].x += background[i].width}
     else if (player.r.x - backgroundPos[i].x < 0) {
@@ -106,7 +111,7 @@ function drawSprite(texture,r,a,b,flip=false){
   if (flip){
     ctx.save()
     ctx.scale(-1,1)
-    ctx.drawImage(texture,-(r.x-a/2)-a,r.y-b/2,a,b)
+    ctx.drawImage(texture,-(r.x-a/2)-a,r.y-b/2)
     ctx.restore()
   } 
   else {
@@ -204,19 +209,10 @@ function draw(dt){
   drawFront(dt)
 }
 
-function wallJumpfunc(dt){
-  if (leftWallJump || rightWallJump){
-    wallJumpTimer += dt
-  }
-  if (wallJumpTimer > wallJumpTime){
-    leftWallJump = false
-    rightWallJump = false
-    wallJumpTimer = 0
-  }
-}
+
 
 function frame(dt){
-  wallJumpfunc(dt)
+  player.wallJumpfunc(dt)
   player.keyPress()
   player.force(dt)
   player.move(dt)
@@ -278,6 +274,7 @@ function setupImages(){
   enemytext=document.getElementById('enemy')
   handtext=document.getElementById('hand')
   zid1=document.getElementById('zid1')
+  skeleani=document.getElementById('skeleani')
 
 
   if (!inverseParalaksa){
@@ -307,6 +304,8 @@ function setupLevel(){
   plats.push(createPlaform({r:V(-610,200),a:60, b:300,tileWidth:60, tileHeight:60,tileL:floorTile,tileR:floorTile,tileC:floorTile}))
   plats.push(createPlaform({r:V(-610,500),a:720, b:60,tileWidth:60, tileHeight:60,tileL:floorTile,tileR:floorTile,tileC:floorTile}))
   plats.push(createPlaform({r:V(50,200),a:60, b:300,tileWidth:60, tileHeight:60,tileL:floorTile,tileR:floorTile,tileC:floorTile}))
+  plats.push(createPlaform({r:V(200,-500),a:60, b:500,tileWidth:60, tileHeight:60,tileL:floorTile,tileR:floorTile,tileC:floorTile}))
+
 
   backTiles.push(new backTile({tileText: zid1,fillColor: 'black', r: V(-550,140),a:600,b:360}))
 

@@ -3,7 +3,7 @@
     r: r,
     v: v,
     a: a-a%tileWidth,
-    b: b,
+    b: b-b%tileHeight,
     m: m,
     fillColor: fillColor,
     edgeColor: edgeColor,

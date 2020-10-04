@@ -1,9 +1,9 @@
 
 
 function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='black'}){
-  let keysPressed = {}
-  let keyState = {}
-  let keyStateoff = {}
+  var keysPressed = {}
+  var keyState = {}
+  var keyStateoff = {}
 
   document.addEventListener('keydown', (event) => {
     keysPressed[event.key] = true
@@ -28,14 +28,15 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
     walkState: 'air',
     duckState: false,
     flip: false,
-    textAtWalk: new textureAtlas(walk,[84,87,84,87],120),
+    // textAtWalk: new textureAtlas(walk,[84,87,84,87],120),
+    textAtWalk: new textureAtlas(skeleani,[31,44,26,44],108),
     textAtJump: new textureAtlas(jump,[48,102,144],153),
 
     draw(dt){
       
-      this.r.subtract(V(this.a/2,this.b/2))
-      drawRectangle(this)
-      this.r.add(V(this.a/2,this.b/2))
+      // this.r.subtract(V(this.a/2,this.b/2))
+      // drawRectangle(this)
+      // this.r.add(V(this.a/2,this.b/2))
       if (this.walkState != 'air'){
         if (this.v.x == 0){
           drawSprite(stance,V(this.r.x+this.a/2 - (this.flip ? this.a : 0),this.r.y),this.a*2,this.b,this.flip)
@@ -86,6 +87,7 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
 
     keyPress(){
       Vol = CollisionWater(this);
+      
       if (keysPressed['w'] || keysPressed[' ']){ 
         if (this.walkState != 'air' && (!keyState[' '] || !keyState['w'])){
           //skok
@@ -126,68 +128,106 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
         keyState['s']=true
         this.duckState = true
       } 
-      else if (keyStateoff['s']) {
+      else if (keyStateoff['s']) 
+      {
         //odduck
         this.b *= 2
         centerLoc.y -= this.b/4
         this.r.y = this.r.y - this.b/4
         keyStateoff['s'] = false
-        if (checkCollisonbool()){
+
+        if (checkCollisonbool())
+        {
           this.r.y = this.r.y + this.b/4
           centerLoc.y += this.b/4
           this.b /= 2
-        } else {this.duckState = false}
+        } 
+        else {this.duckState = false}
       }
+
+      
       if (keysPressed['a']) { 
-        if (this.v.x > 0) { 
-          if (this.walkState == 'air') {
-            this.F.x = -acc*bremzair - Vol * vodaUpor * this.v.x}
+        if (this.v.x > 0) 
+        { 
+          if (this.walkState == 'air') {this.F.x = -acc*bremzair - Vol * vodaUpor * this.v.x}
           else {this.F.x = -acc*bremz - Vol * vodaUpor * this.v.x}
-          }
-        else {
-          this.F.x = -acc - Vol * vodaUpor * this.v.x} 
+        }
+        else {this.F.x = -acc - Vol * vodaUpor * this.v.x} 
       }
-      else if (keyStateoff['a'])  {
+      else if (keyStateoff['a'])  
+      {
         this.F.x = 0
         keyStateoff['a'] =  false
-        }
-      if (keysPressed['d']){ 
-        if (this.v.x < 0) { 
+      }
+
+      if (keysPressed['d'])
+      { 
+        if (this.v.x < 0) 
+        { 
           if (this.walkState == 'air') {this.F.x = acc*bremzair - Vol * vodaUpor * this.v.x }
           else {this.F.x = acc*bremz - Vol * vodaUpor * this.v.x }
-           }
+        }
         else {this.F.x = acc - Vol * vodaUpor * this.v.x}
-      } 
-      else if (keyStateoff['d']) {
+      }
+      else if (keyStateoff['d']) 
+      {
         this.F.x = 0
         keyStateoff['d'] = false
-        }
+      }
 
 
-      if (this.walkState != 'air') { 
+      if (this.walkState != 'air') 
+      { 
         this.F.y = 0 
-        if (!keysPressed['a'] && !keysPressed['d']){
+        if (!keysPressed['a'] && !keysPressed['d'])
+        {
           if (Math.abs(this.v.x) < 20) { this.v.x = 0 }
           else {this.v.x /= fric}
         }
       }
-      else {
-        if(keysPressed['w'] || keysPressed[' ']){this.F.y = jumpg - vzgon * Vol - Vol * vodaUpor * this.v.y }
+      else 
+      {
+        if(keysPressed['w'] || keysPressed[' ']) {this.F.y = jumpg - vzgon * Vol - Vol * vodaUpor * this.v.y }
         else {this.F.y = g - vzgon * Vol  - Vol * vodaUpor * this.v.y }
-        }
+      }
       
     },
+
     duck(){
-      if (!keysPressed['s'] && this.duckState){
+      if (this.duckState && !keysPressed['s'])
+      {
         this.b *= 2
         centerLoc.y -= this.b/4
         this.r.y = this.r.y - this.b/4
-        if (checkCollisonbool()){
+        if (checkCollisonbool())
+        {
           this.r.y = this.r.y + this.b/4
           centerLoc.y += this.b/4
           this.b /= 2
-        } else {this.duckState = false}
-
+        } 
+        else {this.duckState = false}
+      }
+    },
+    wallJumpfunc(dt){
+      if ((keysPressed[' '] || keysPressed['w']) && (!keyState[' '] || !keyState['w']))
+      {
+        JumpTimer += dt
+        if (JumpTimer > jumpTime)
+        {
+          keyState[' '] = true
+          keyState['w'] = true
+          JumpTimer = 0
+        }  
+      }
+      if (leftWallJump || rightWallJump)
+      {
+        wallJumpTimer += dt
+        if (wallJumpTimer > wallJumpTime)
+        {
+          leftWallJump = false
+          rightWallJump = false
+          wallJumpTimer = 0
+        }
       }
     }
   }
