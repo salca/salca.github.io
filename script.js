@@ -1,4 +1,4 @@
-const zoom = 1.5;
+const zoom = 1;
 const width = 700;
 const height = 700;
 // const width = screen.width
