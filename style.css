@@ -1,0 +1,25 @@
+#canvas{
+  background: rgb(57, 55, 66);
+  background-image: url(assets/staticbackground.png)
+}
+#box{
+  font-size: 20px;
+}
+
+#box .num {
+  color: rgb(5, 160, 39);
+  display: inline;
+}
+
+#box .lab {
+  color: rgb(255, 0, 0);
+}
+
+
+img {
+  display: none;
+}
+
+body {
+  background-color: black;
+}
