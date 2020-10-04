@@ -144,10 +144,11 @@ function mod(a,n){
 }
 
 function reset(){
-  player.r = V(width/2,200)
+  player.r = V(width/2,height/2)
   player.v = V(0,0)
   ctx.resetTransform()
   centerLoc = V(0,0)
+  dr = V(0,0)
   for (i in backgroundPos) {
     backgroundPos[i] = V(0,0)
   }
@@ -297,7 +298,7 @@ function setupLevel(){
 }
 
 function setup(){
-  player = createPlayer({r:V(width/2,3*height/4),a:28*3*playerSize,b:40*3*playerSize,fillColor:'black'})
+  player = createPlayer({r:V(width/2,height/2),a:28*3*playerSize,b:40*3*playerSize,fillColor:'black'})
   setupImages()
   setupLevel()
   setupSound()
