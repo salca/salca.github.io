@@ -1,6 +1,6 @@
 #canvas{
   background: rgb(57, 55, 66);
-  background-image: url(assets/staticbackground.png)
+  background-image: url(assets/scrolling_pixel_background.png)
 }
 #box{
   font-size: 20px;

@@ -70,7 +70,7 @@ function sound(src) {
 
 function drawFront(dt){
   for (i in frontPos) {
-    frontPos[i].add(dr.times(paralaksa[i]))
+    frontPos[i].add(V(dr.x*paralaksa[i],0))
     if (player.r.x - frontPos[i].x > background[i].width) {
       frontPos[i].x += background[i].width}
     else if (player.r.x - frontPos[i].x < 0) {
@@ -84,7 +84,7 @@ function drawFront(dt){
 
 function drawBackground(dt){
   for (i in backgroundPos) {
-    backgroundPos[i].add(dr.times(paralaksa[i]))
+    backgroundPos[i].add(V(dr.x*paralaksa[i],0))
     if (player.r.x - backgroundPos[i].x > background[i].width) {
       backgroundPos[i].x += background[i].width}
     else if (player.r.x - backgroundPos[i].x < 0) {
@@ -239,8 +239,8 @@ function setupSound(){
 }
 
 function setupImages(){
-  background.back0=document.getElementById('back0')
-  backgroundPos.back0 = V(0,0)
+  // background.back0=document.getElementById('back0')
+  // backgroundPos.back0 = V(0,0)
   background.back1=document.getElementById('back1')
   backgroundPos.back1 = V(0,0)
   background.back2=document.getElementById('back2')
@@ -265,7 +265,7 @@ function setupImages(){
 
 
   if (!inverseParalaksa){
-    paralaksa.back0 = 1.0
+    // paralaksa.back0 = 1.0
     paralaksa.back1 = 0.9
     paralaksa.back2 = 0.8
     paralaksa.back3 = 0.7
