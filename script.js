@@ -1,12 +1,12 @@
-const zoom = 1.25
+const zoom = 1
 // const width = 700;
 // const height = 700;
 const width = window.innerWidth/zoom
 const height = window.innerHeight/zoom
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
-canvas.style.transform = `scale(${zoom})`
-canvas.style.transformOrigin = 'top left'
+// canvas.style.transform = `scale(${zoom})`
+// canvas.style.transformOrigin = 'top left'
 var plats = []
 const odboj = -0.5*0
 const maxyspeed = 500
@@ -19,7 +19,7 @@ const jumpg = 700
 const jumpSpeed = 500
 const vodaJumpSpeed = -0.05
 const fric = 1.025
-const playerSize = 2
+const playerSize = 10
 const walkAniSpeed = 2e-2
 const vzgon = 0.5;
 const vodaUpor = 0.0008;
@@ -37,6 +37,11 @@ var leftWallJump = false
 var rightWallJump = false
 var wallJumpTimer = 0
 var JumpTimer = 0
+ctx.imageSmoothingEnabled       = false;
+ctx.webkitImageSmoothingEnabled = false;
+ctx.mozImageSmoothingEnabled    = false;
+ctx.msImageSmoothingEnabled     = false;
+ctx.oImageSmoothingEnabled      = false;
 
 
 // document.body.style.overflow = "hidden"
@@ -300,7 +305,7 @@ function setupLevel(){
   plats.push(createPlaform({r:V(150,400),a:60,tileL:tileL,tileR:tileR,tileC:tileC}))
   plats.push(createPlaform({r:V(500,500),a:60,tileL:tileL,tileR:tileR,tileC:tileC}))
   plats.push(createPlaform({r:V(300,150),a:60,tileL:tileL,tileR:tileR,tileC:tileC}))
-  plats.push(createPlaform({r:V(550,300),a:5000,tileL:tileL,tileR:tileR,tileC:tileC}))
+  plats.push(createPlaform({r:V(550,400),a:5000,tileL:tileL,tileR:tileR,tileC:tileC}))
   plats.push(createPlaform({r:V(-610,200),a:60, b:300,tileWidth:60, tileHeight:60,tileL:floorTile,tileR:floorTile,tileC:floorTile}))
   plats.push(createPlaform({r:V(-610,500),a:720, b:60,tileWidth:60, tileHeight:60,tileL:floorTile,tileR:floorTile,tileC:floorTile}))
   plats.push(createPlaform({r:V(50,200),a:60, b:300,tileWidth:60, tileHeight:60,tileL:floorTile,tileR:floorTile,tileC:floorTile}))
