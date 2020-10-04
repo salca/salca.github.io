@@ -70,7 +70,7 @@ function sound(src) {
 
 function drawFront(dt){
   for (i in frontPos) {
-    frontPos[i].add(V(dr.x*paralaksa[i],0))
+    frontPos[i].add(V(dr.x*paralaksa[i],dr.y*paralaksa[i]/2))
     if (player.r.x - frontPos[i].x > background[i].width) {
       frontPos[i].x += background[i].width}
     else if (player.r.x - frontPos[i].x < 0) {
@@ -84,7 +84,7 @@ function drawFront(dt){
 
 function drawBackground(dt){
   for (i in backgroundPos) {
-    backgroundPos[i].add(V(dr.x*paralaksa[i],0))
+    backgroundPos[i].add(V(dr.x*paralaksa[i],dr.y*paralaksa[i]/2))
     if (player.r.x - backgroundPos[i].x > background[i].width) {
       backgroundPos[i].x += background[i].width}
     else if (player.r.x - backgroundPos[i].x < 0) {
