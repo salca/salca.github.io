@@ -101,6 +101,7 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
       if (keysPressed['s'] && !keyState['s'] && !this.duckState){
         //duck
         this.r.y = this.r.y + this.b/4
+        centerLoc.y += this.b/4
         this.b /= 2
         keyState['s']=true
         this.duckState = true
@@ -108,10 +109,12 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
       else if (keyStateoff['s']) {
         //odduck
         this.b *= 2
+        centerLoc.y -= this.b/4
         this.r.y = this.r.y - this.b/4
         keyStateoff['s'] = false
         if (checkCollisonbool()){
           this.r.y = this.r.y + this.b/4
+          centerLoc.y += this.b/4
           this.b /= 2
         } else {this.duckState = false}
       }
@@ -157,9 +160,11 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
     duck(){
       if (!keysPressed['s'] && this.duckState){
         this.b *= 2
+        centerLoc.y -= this.b/4
         this.r.y = this.r.y - this.b/4
         if (checkCollisonbool()){
           this.r.y = this.r.y + this.b/4
+          centerLoc.y += this.b/4
           this.b /= 2
         } else {this.duckState = false}
 

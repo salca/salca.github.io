@@ -1,4 +1,4 @@
-const zoom = 1.25;
+const zoom = 1
 // const width = 700;
 // const height = 700;
 const width = window.innerWidth/zoom
@@ -28,6 +28,7 @@ var inverseParalaksa = false
 var jumpState = 0
 var centerLoc = V(0,0)
 var playerPosold = V(0,0)
+var dr = V(0,0)
 // document.body.style.overflow = "hidden"
 
 canvas.width = width
@@ -69,11 +70,11 @@ function sound(src) {
 
 function drawFront(dt){
   for (i in frontPos) {
-    frontPos[i].add(V(player.v.x*paralaksa[i]*dt,player.v.y*dt))
-    if (player.r.x - frontPos[i] > background[i].width) {
-      frontPos[i] += background[i].width}
-    else if (player.r.x - frontPos[i] < 0) {
-      frontPos[i] -= background[i].width
+    frontPos[i].add(dr.times(paralaksa[i]))
+    if (player.r.x - frontPos[i].x > background[i].width) {
+      frontPos[i].x += background[i].width}
+    else if (player.r.x - frontPos[i].x < 0) {
+      frontPos[i].x -= background[i].width
     }
     ctx.drawImage(background[i],frontPos[i].x,frontPos[i].y)
     ctx.drawImage(background[i],frontPos[i].x-background[i].width,frontPos[i].y)
@@ -83,11 +84,11 @@ function drawFront(dt){
 
 function drawBackground(dt){
   for (i in backgroundPos) {
-    backgroundPos[i].add(V(player.v.x*paralaksa[i]*dt,player.v.y*dt))
-    if (player.r.x - backgroundPos[i] > background[i].width) {
-      backgroundPos[i] += background[i].width}
-    else if (player.r.x - backgroundPos[i] < 0) {
-      backgroundPos[i] -= background[i].width
+    backgroundPos[i].add(dr.times(paralaksa[i]))
+    if (player.r.x - backgroundPos[i].x > background[i].width) {
+      backgroundPos[i].x += background[i].width}
+    else if (player.r.x - backgroundPos[i].x < 0) {
+      backgroundPos[i].x -= background[i].width
     }
     ctx.drawImage(background[i],backgroundPos[i].x,backgroundPos[i].y)
     ctx.drawImage(background[i],backgroundPos[i].x-background[i].width,backgroundPos[i].y)
@@ -125,15 +126,18 @@ function checkCollisonbool(){
   return false
 }
 
-function centerScreen(dt){
-  ctx.translate(-player.v.x*dt,-player.v.y*dt)
-  centerLoc.add(player.v.times(dt))
-}
-
 // function centerScreen(dt){
-//   ctx.translate(-player.r.x + width/2 + centerLoc,0)
-//   centerLoc = player.r.x - width/2
+//   ctx.translate(-player.v.x*dt,-player.v.y*dt)
+//   centerLoc.add(player.v.times(dt))
 // }
+
+function centerScreen(dt){
+  dr = V(player.r.x - width/2 - centerLoc.x, player.r.y - height/2 - centerLoc.y)
+  ctx.translate(-dr.x, -dr.y)
+  centerLoc.x = player.r.x - width/2
+  centerLoc.y = player.r.y - height/2
+
+}
 
 function mod(a,n){
   return (a%n>=0) ? a%n : a%n + n
@@ -145,7 +149,7 @@ function reset(){
   ctx.resetTransform()
   centerLoc = V(0,0)
   for (i in backgroundPos) {
-    backgroundPos[i] = 0
+    backgroundPos[i] = V(0,0)
   }
   for (i in enemies){
     enemies[i].dead = false
@@ -234,6 +238,8 @@ function setupSound(){
 }
 
 function setupImages(){
+  background.back0=document.getElementById('back0')
+  backgroundPos.back0 = V(0,0)
   background.back1=document.getElementById('back1')
   backgroundPos.back1 = V(0,0)
   background.back2=document.getElementById('back2')
@@ -256,7 +262,9 @@ function setupImages(){
   handtext=document.getElementById('hand')
   zid1=document.getElementById('zid1')
 
+
   if (!inverseParalaksa){
+    paralaksa.back0 = 1.0
     paralaksa.back1 = 0.9
     paralaksa.back2 = 0.8
     paralaksa.back3 = 0.7
@@ -289,7 +297,7 @@ function setupLevel(){
 }
 
 function setup(){
-  player = createPlayer({r:V(width/2,height/2),a:28*3*playerSize,b:40*3*playerSize,fillColor:'black'})
+  player = createPlayer({r:V(width/2,3*height/4),a:28*3*playerSize,b:40*3*playerSize,fillColor:'black'})
   setupImages()
   setupLevel()
   setupSound()
