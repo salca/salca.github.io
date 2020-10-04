@@ -8,7 +8,7 @@ const ctx = canvas.getContext('2d')
 canvas.style.transform = `scale(${zoom})`
 canvas.style.transformOrigin = 'top left'
 var plats = []
-const odboj = -0.5
+const odboj = -0.5*0
 const maxyspeed = 500
 const maxxspeed = 400
 const bremz = 4
@@ -24,11 +24,16 @@ const walkAniSpeed = 2e-2
 const vzgon = 0.5;
 const vodaUpor = 0.0008;
 const handRange = 200;
+const wallJump = V(300, -500)
+const wallJumpTime = 1
 var inverseParalaksa = false
 var jumpState = 0
 var centerLoc = V(0,0)
 var playerPosold = V(0,0)
 var dr = V(0,0)
+var leftWallJump = false
+var rightWallJump = false
+var wallJumpTimer = 0
 // document.body.style.overflow = "hidden"
 
 canvas.width = width
@@ -174,8 +179,7 @@ function drawRectangle({r,a,b,fillColor,edgeColor}){
 }
 
 function clearCanvas(){
-  console.log(centerLoc.x,centerLoc.y)
-  ctx.clearRect(centerLoc.x,centerLoc.y,width,height)
+  ctx.clearRect(centerLoc.x,centerLoc.y - (player.duckState ? player.b/2 : 0),width,height)
 }
 
 
@@ -200,7 +204,19 @@ function draw(dt){
   drawFront(dt)
 }
 
+function wallJumpfunc(dt){
+  if (leftWallJump || rightWallJump){
+    wallJumpTimer += dt
+  }
+  if (wallJumpTimer > wallJumpTime){
+    leftWallJump = false
+    rightWallJump = false
+    wallJumpTimer = 0
+  }
+}
+
 function frame(dt){
+  wallJumpfunc(dt)
   player.keyPress()
   player.force(dt)
   player.move(dt)

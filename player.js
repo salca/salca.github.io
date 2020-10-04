@@ -95,7 +95,27 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
           this.walkState = 'air'
           keyState[' '] = true
           keyState['w'] = true
+        }
+        else if (leftWallJump && (!keyState[' '] || !keyState['w']) )
+        {
+          jump.restart() 
+          jump.play()
+          this.v.x = -wallJump.x
+          this.v.y = wallJump.y
+          leftWallJump = false
+          keyState[' '] = true
+          keyState['w'] = true
         } 
+        else if (rightWallJump && (!keyState[' '] || !keyState['w']) ) 
+        {
+          jump.restart() 
+          jump.play()
+          this.v.x = wallJump.x
+          this.v.y = wallJump.y
+          rightWallJump = false
+          keyState[' '] = true
+          keyState['w'] = true
+        }
       }
 
       if (keysPressed['s'] && !keyState['s'] && !this.duckState){

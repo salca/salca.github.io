@@ -69,6 +69,7 @@ function checkCollision(player){
           //levi zid
           player.v.x *= odboj
           player.r.x = plat.r.x - player.a/2
+          leftWallJump = true
         }
       }
       else {
@@ -81,6 +82,7 @@ function checkCollision(player){
           //levi zid
           player.v.x *= odboj
           player.r.x = plat.r.x - player.a/2
+          leftWallJump = true
         }
       }
     }
@@ -95,6 +97,7 @@ function checkCollision(player){
           //desni zid
           player.v.x *= odboj
           player.r.x = plat.r.x + plat.a + player.a/2
+          rightWallJump = true
         }
       } else {
         if (Math.abs( player.r.x - player.a/2 - plat.r.x - plat.a ) > Math.abs( player.r.y - player.b/2 - plat.r.y - plat.b)){
@@ -106,6 +109,7 @@ function checkCollision(player){
           //desni zid
           player.v.x *= odboj
           player.r.x = plat.r.x + plat.a + player.a/2    
+          rightWallJump = true
         }
       }
     }
