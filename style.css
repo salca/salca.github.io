@@ -1,7 +1,8 @@
 #canvas{
   /* background: rgb(57, 55, 66); */
   background-image: url(assets/scrolling_pixel_background.png);
-  background-size: cover;
+  /* background-size: cover; */
+  image-rendering: crisp-edges;
 }
 #box{
   font-size: 20px;

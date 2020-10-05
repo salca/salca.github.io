@@ -1,4 +1,4 @@
-const zoom = 1
+const zoom = 1.2
 // const width = 700;
 // const height = 700;
 const width = window.innerWidth/zoom
@@ -8,6 +8,8 @@ const ctx = canvas.getContext('2d')
 dpi = window.devicePixelRatio;
 canvas.style.transform = `scale(${zoom})`
 canvas.style.transformOrigin = 'top left'
+canvas.width = width
+canvas.height = height
 var plats = []
 const odboj = -0.5*0
 const maxyspeed = 500
@@ -43,8 +45,7 @@ var JumpTimer = 0
 
 // document.body.style.overflow = "hidden"
 
-canvas.width = width
-canvas.height = height
+
 
 var background = {}
 var backgroundPos = {}
