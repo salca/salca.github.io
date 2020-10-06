@@ -1,6 +1,6 @@
 #canvas{
   /* background: rgb(57, 55, 66); */
-  background-image: url(assets/scrolling_pixel_background.png);
+  background-image: url(assets/altbackground.png);
   /* background-size: cover; */
   image-rendering: crisp-edges;
 }

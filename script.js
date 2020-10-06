@@ -30,7 +30,8 @@ const handRange = 200;
 const wallJump = V(300, -500)
 const wallJumpTime = 0.1
 const yparalask = 1
-const jumpTime = 0.1
+const jumpTime = 0.2
+const offEdgeJumpTime = 0.2
 var inverseParalaksa = false
 var jumpState = 0
 var centerLoc = V(0,0)
@@ -40,13 +41,10 @@ var leftWallJump = false
 var rightWallJump = false
 var wallJumpTimer = 0
 var JumpTimer = 0
+var offEdgeJumpTimer = 0
+var offEdgeJump = false
 // ctx.imageSmoothingEnabled = false;
-
-
 // document.body.style.overflow = "hidden"
-
-
-
 var background = {}
 var backgroundPos = {}
 var paralaksa = {} 
@@ -108,7 +106,6 @@ function drawBackground(dt){
     ctx.drawImage(background[i],backgroundPos[i].x-background[i].width,backgroundPos[i].y)
     ctx.drawImage(background[i],backgroundPos[i].x+background[i].width,backgroundPos[i].y)
   }
-  
 }
 
 function drawSprite(texture,r,a,b,flip=false){
@@ -135,7 +132,6 @@ function checkCollisonbool(){
         ( plat.r.x >= player.r.x + player.a/2 ) ||
         ( plat.r.y >= player.r.y + player.b/2  ) ||
         ( plat.r.y + plat.b <= player.r.y - player.b/2) ) ) {return true}
-    
   }
   return false
 }
@@ -217,7 +213,7 @@ function draw(dt){
 
 
 function frame(dt){
-  player.wallJumpfunc(dt)
+  player.Jumpfunc(dt)
   player.keyPress()
   player.force(dt)
   player.move(dt)

@@ -45,40 +45,50 @@ function checkCollision(player){
   
   for (i in plats){
     plat=plats[i]
-    if (i == player.walkState){
+    if (i == player.walkState)
+    {
       if (( plat.r.x + plat.a <= player.r.x - player.a/2 ) ||
-         ( plat.r.x >= player.r.x + player.a/2 )){
+         ( plat.r.x >= player.r.x + player.a/2 ))
+      {
         player.walkState = 'air'
+        offEdgeJump = true
         continue
-        }
+      }
     }
     if ( ( plat.r.x + plat.a <= player.r.x - player.a/2 ) ||
          ( plat.r.x >= player.r.x + player.a/2 ) ||
          ( plat.r.y >= player.r.y + player.b/2  ) ||
          ( plat.r.y + plat.b <= player.r.y - player.b/2)) {continue}
            
-    if ( player.v.x > 0 ) {
-      if ( player.v.y > 0){
-        if (Math.abs( player.r.x + player.a/2 - plat.r.x ) > Math.abs( player.r.y + player.b/2 - plat.r.y)){
+    if ( player.v.x > 0 ) 
+    {
+      if ( player.v.y > 0)
+      {
+        if (Math.abs( player.r.x + player.a/2 - plat.r.x ) > Math.abs( player.r.y + player.b/2 - plat.r.y))
+        {
           //tla
           player.v.y = 0
           player.r.y = plat.r.y - player.b/2
           player.walkState = i
         }
-        else {
+        else 
+        {
           //levi zid
           player.v.x *= odboj
           player.r.x = plat.r.x - player.a/2
           leftWallJump = true
         }
       }
-      else {
-        if (Math.abs( player.r.x + player.a/2 - plat.r.x ) > Math.abs( player.r.y - player.b/2 - plat.r.y - plat.b)){
+      else 
+      {
+        if (Math.abs( player.r.x + player.a/2 - plat.r.x ) > Math.abs( player.r.y - player.b/2 - plat.r.y - plat.b))
+        {
           //strop          
           player.v.y *= odboj
           player.r.y = plat.r.y + plat.b + player.b/2
         }
-        else {
+        else 
+        {
           //levi zid
           player.v.x *= odboj
           player.r.x = plat.r.x - player.a/2
@@ -86,25 +96,35 @@ function checkCollision(player){
         }
       }
     }
-    else {
-      if ( player.v.y >= 0){
-        if ( Math.abs( player.r.x - player.a/2 - plat.r.x - plat.a ) > Math.abs( player.r.y + player.b/2 - plat.r.y ) ) {
+    else 
+    {
+      if ( player.v.y >= 0)
+      {
+        if ( Math.abs( player.r.x - player.a/2 - plat.r.x - plat.a ) > Math.abs( player.r.y + player.b/2 - plat.r.y ) ) 
+        {
           //tla
           player.v.y = 0
           player.r.y = plat.r.y - player.b/2
           player.walkState = i
-        } else {
+        } 
+        else 
+        {
           //desni zid
           player.v.x *= odboj
           player.r.x = plat.r.x + plat.a + player.a/2
           rightWallJump = true
         }
-      } else {
-        if (Math.abs( player.r.x - player.a/2 - plat.r.x - plat.a ) > Math.abs( player.r.y - player.b/2 - plat.r.y - plat.b)){
+      } 
+      else 
+      {
+        if (Math.abs( player.r.x - player.a/2 - plat.r.x - plat.a ) > Math.abs( player.r.y - player.b/2 - plat.r.y - plat.b))
+        {
           //strop          
           player.v.y *= odboj
           player.r.y = plat.r.y + plat.b + player.b/2      
-        } else {
+        } 
+        else 
+        {
 
           //desni zid
           player.v.x *= odboj

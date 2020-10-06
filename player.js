@@ -88,12 +88,14 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
     keyPress(){
       Vol = CollisionWater(this);
       
-      if (keysPressed['w'] || keysPressed[' ']){ 
-        if (this.walkState != 'air' && (!keyState[' '] || !keyState['w'])){
+      if (keysPressed['w'] || keysPressed[' '])
+      { 
+        if (this.walkState != 'air' && (!keyState[' '] || !keyState['w']))
+        {
           //skok
           jump.restart() 
           jump.play()
-          this.v.y -= jumpSpeed + vodaJumpSpeed * Vol;
+          this.v.y = -jumpSpeed - vodaJumpSpeed * Vol;
           this.walkState = 'air'
           keyState[' '] = true
           keyState['w'] = true
@@ -190,7 +192,6 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
         if(keysPressed['w'] || keysPressed[' ']) {this.F.y = jumpg - vzgon * Vol - Vol * vodaUpor * this.v.y }
         else {this.F.y = g - vzgon * Vol  - Vol * vodaUpor * this.v.y }
       }
-      
     },
 
     duck(){
@@ -208,7 +209,7 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
         else {this.duckState = false}
       }
     },
-    wallJumpfunc(dt){
+    Jumpfunc(dt){
       if ((keysPressed[' '] || keysPressed['w']) && (!keyState[' '] || !keyState['w']))
       {
         JumpTimer += dt
@@ -227,6 +228,29 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
           leftWallJump = false
           rightWallJump = false
           wallJumpTimer = 0
+        }
+      }
+      if (offEdgeJump)
+      {
+        offEdgeJumpTimer += dt
+        if (keysPressed['w'] || keysPressed[' '])
+        { 
+          if ((!keyState[' '] || !keyState['w']))
+          {
+            //skok
+            jump.restart() 
+            jump.play()
+            this.v.y = -jumpSpeed - vodaJumpSpeed * Vol;
+            keyState[' '] = true
+            keyState['w'] = true
+            offEdgeJump = false
+            offEdgeJumpTimer = 0
+          }
+        }
+        if (offEdgeJumpTimer > offEdgeJumpTime)
+        {
+          offEdgeJump = false
+          offEdgeJumpTimer = 0
         }
       }
     }
