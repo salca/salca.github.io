@@ -17,8 +17,8 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
   let player = {
     r: r,
     v: v,
-    a: a/2,
-    b: b,
+    a: 140*playerSize,
+    b: 332*playerSize,
     m: m,
     F: F,
     walkTimer : 0,
@@ -28,9 +28,7 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
     walkState: 'air',
     duckState: false,
     flip: false,
-    // textAtWalk: new textureAtlas(walk,[84,87,84,87],120),
-    textAtWalk: new textureAtlas(skeleani,[31*4,44*4,26*4,44*4],108*4),
-    textAtJump: new textureAtlas(jump,[48,102,144],153),
+    text: new textureAtlas(playertext,[new Array(8).fill(316),new Array(5).fill(285),new Array(3).fill(201),new Array(8).fill(201)], [341,341,314,395], [V(72,7),V(97,7),V(35,-18),V(46,0)]  ),
 
     draw(dt){
       
@@ -39,26 +37,29 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
       // this.r.add(V(this.a/2,this.b/2))
       if (this.walkState != 'air'){
         if (this.v.x == 0){
-          drawSprite(stance,V(this.r.x+this.a/2 - (this.flip ? this.a : 0),this.r.y),this.a*2,this.b,this.flip)
+          this.text.sprite({x:this.r.x - this.a/2, y:this.r.y - this.b/2, i:0, j:0, scale:playerSize, flip:this.flip})
+          this.walkFrame = 0;
+          this.walkTimer = 0;
         } 
         else {
           this.walkTimer += dt;
-          if (this.walkTimer >= 1/walkAniSpeed/Math.abs(v.x)){
+          if (this.walkTimer >= 1/walkAniSpeed/Math.abs(this.v.x/maxxspeed))
+          {
             this.walkFrame += 1;
             this.walkTimer = 0;
           }
-          this.textAtWalk.sprite({flip:this.flip,x:this.r.x-this.a/2, y:this.r.y-this.b/2, i:this.walkFrame % 4, scale: playerSize })
+          this.text.sprite({flip:this.flip,x:this.r.x - this.a/2, y:this.r.y - this.b/2, i:this.walkFrame % 6 + 2 , j:0 , scale: playerSize })
         }
       }
       else {
         if (v.y < -200){
-          this.textAtJump.sprite({flip:this.flip,x:this.r.x-this.a/2+ (this.flip ? this.a/2 : 0), y:this.r.y-this.b/2, i:0, scale: playerSize })
+          this.text.sprite({flip:this.flip,x:this.r.x-this.a/2, y:this.r.y-this.b/2, i:0, j:3, scale: playerSize })
         }
         else if (v.y < 100){
-          this.textAtJump.sprite({flip:this.flip,x:this.r.x-this.a*1.6+ (this.flip ? this.a*2.1 : 0), y:this.r.y-this.b/2, i:1, scale: playerSize })
+          this.text.sprite({flip:this.flip,x:this.r.x-this.a/2, y:this.r.y-this.b/2, i:1, j:3, scale: playerSize })
         }
         else{
-          this.textAtJump.sprite({flip:this.flip,x:this.r.x-this.a*1.6+ (this.flip ? this.a*1.6 : 0), y:this.r.y-this.b/2, i:2, scale: playerSize })
+          this.text.sprite({flip:this.flip,x:this.r.x-this.a/2, y:this.r.y-this.b/2, i:2, j:3, scale: playerSize })
 
         }
       }

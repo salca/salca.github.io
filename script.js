@@ -1,4 +1,4 @@
-const zoom = 1.2
+const zoom = 1.4
 // const width = 700;
 // const height = 700;
 const width = window.innerWidth/zoom
@@ -22,8 +22,8 @@ const jumpg = 700
 const jumpSpeed = 500
 const vodaJumpSpeed = -0.05
 const fric = 1.025
-const playerSize = 1
-const walkAniSpeed = 2e-2
+const playerSize = 0.5
+const walkAniSpeed = 12
 const vzgon = 0.5;
 const vodaUpor = 0.0008;
 const handRange = 200;
@@ -32,6 +32,7 @@ const wallJumpTime = 0.1
 const yparalask = 1
 const jumpTime = 0.2
 const offEdgeJumpTime = 0.2
+const tile = 30
 var inverseParalaksa = false
 var jumpState = 0
 var centerLoc = V(0,0)
@@ -190,7 +191,6 @@ function clearCanvas(){
 
 function draw(dt){
   clearCanvas()
-  // fix_dpi()
   drawBackground(dt)
   for (i in backTiles){
     backTiles[i].draw()
@@ -275,7 +275,7 @@ function setupImages(){
   enemytext=document.getElementById('enemy')
   handtext=document.getElementById('hand')
   zid1=document.getElementById('zid1')
-  skeleani=document.getElementById('skeleani')
+  playertext=document.getElementById('playertext')
 
 
   if (!inverseParalaksa){
@@ -314,7 +314,7 @@ function setupLevel(){
 }
 
 function setup(){
-  player = createPlayer({r:V(width/2,height/2),a:28*3*playerSize,b:40*3*playerSize,fillColor:'black'})
+  player = createPlayer({r:V(width/2,height/2),fillColor:'black'})
   setupImages()
   setupLevel()
   setupSound()
