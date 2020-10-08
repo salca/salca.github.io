@@ -17,7 +17,6 @@ class textureAtlas{
           {
             var xpos = sumOfArray(this.widths[j],0,i);
             var ypos = sumOfArray(this.height,0,j);
-            console.log(xpos)
             ctx.drawImage(this.texture,xpos,ypos,this.widths[j][i],this.height[j],x - this.offset[j].x,y - this.offset[j].y,this.widths[j][i]*scale,this.height[j]*scale)
           }
           else 
@@ -42,7 +41,7 @@ class textureAtlas{
             var ypos = sumOfArray(this.height,0,j);
             ctx.save()
             ctx.scale(-1,1)
-            ctx.drawImage(this.texture,xpos,ypos,this.widths[j][i],this.height[j],-(x + this.offset[j].x), y - this.offset[j].y,this.widths[j][i]*scale,this.height[j]*scale)
+            ctx.drawImage(this.texture,xpos,ypos,this.widths[j][i],this.height[j],-(x + player.a + this.offset[j].x) , y - this.offset[j].y,this.widths[j][i]*scale,this.height[j]*scale)
             ctx.restore()
           }
           else 

@@ -14,7 +14,8 @@ var plats = []
 const odboj = -0.5*0
 const maxyspeed = 500
 const maxxspeed = 400
-const bremz = 4
+// const bremz = 4
+const bremz = 3
 const bremzair = 3
 const acc = 300
 const g = 2000
@@ -232,6 +233,7 @@ function frame(dt){
     checkCollision(enemies[i])
   }
   draw(dt)
+  // console.log(player.walkState)
 }
 
 let previousTime=0
@@ -314,7 +316,7 @@ function setupLevel(){
 }
 
 function setup(){
-  player = createPlayer({r:V(width/2,height/2),fillColor:'black'})
+  player = createPlayer({r:V(width/2,height/2 - 200),fillColor:'black'})
   setupImages()
   setupLevel()
   setupSound()

@@ -18,30 +18,57 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
     r: r,
     v: v,
     a: 140*playerSize,
-    b: 332*playerSize,
+    b: 395*playerSize,
     m: m,
     F: F,
     walkTimer : 0,
     walkFrame: 0,
+    firstWalkFrame : false,
     fillColor: fillColor,
     edgeColor: edgeColor,
     walkState: 'air',
     duckState: false,
     flip: false,
-    text: new textureAtlas(playertext,[new Array(8).fill(316),new Array(5).fill(285),new Array(3).fill(201),new Array(8).fill(201)], [341,341,314,395], [V(72,7),V(97,7),V(35,-18),V(46,0)]  ),
+    bremzani: false,
+    text: new textureAtlas(playertext,[new Array(8).fill(316),new Array(5).fill(285),new Array(3).fill(201),new Array(3).fill(201)], [341,341,314,395], [V(72,7).times(playerSize),V(97,7).times(playerSize),V(35,-18).times(playerSize),V(46,0).times(playerSize)]  ),
 
     draw(dt){
-      
-      // this.r.subtract(V(this.a/2,this.b/2))
-      // drawRectangle(this)
-      // this.r.add(V(this.a/2,this.b/2))
+      this.r.subtract(V(this.a/2,this.b/2))
+      drawRectangle(this)
+      this.r.add(V(this.a/2,this.b/2))
       if (this.walkState != 'air'){
-        if (this.v.x == 0){
+        if (this.bremzani)
+        {
+          this.bremzTimer += dt;
+          if (this.bremzTimer >= this.bremzTime)
+          {
+            this.bremzFrame += 1;
+            this.bremzTimer = 0;
+          }
+          this.text.sprite({flip:this.flip,x:this.r.x - this.a/2, y:this.r.y - this.b/2, i:this.bremzFrame % 5 , j:1 , scale: playerSize })   
+          if ( this.bremzFrame == 4 )
+          {
+            this.firstWalkFrame = true;
+          }
+        }
+        else if (this.v.x == 0){
           this.text.sprite({x:this.r.x - this.a/2, y:this.r.y - this.b/2, i:0, j:0, scale:playerSize, flip:this.flip})
           this.walkFrame = 0;
           this.walkTimer = 0;
+          this.firstWalkFrame = true;
         } 
-        else {
+        else if (this.firstWalkFrame)
+        {
+          this.text.sprite({x:this.r.x - this.a/2, y:this.r.y - this.b/2, i:1, j:0, scale:playerSize, flip:this.flip})
+          this.walkTimer += dt;
+          if (this.walkTimer >= 1/walkAniSpeed/Math.abs(this.v.x/maxxspeed))
+          {
+            this.firstWalkFrame = false;
+            this.walkTimer = 0;
+          }
+        }
+        else 
+        {
           this.walkTimer += dt;
           if (this.walkTimer >= 1/walkAniSpeed/Math.abs(this.v.x/maxxspeed))
           {
@@ -51,11 +78,12 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
           this.text.sprite({flip:this.flip,x:this.r.x - this.a/2, y:this.r.y - this.b/2, i:this.walkFrame % 6 + 2 , j:0 , scale: playerSize })
         }
       }
-      else {
-        if (v.y < -200){
+      else 
+      {
+        if (this.v.y < -200){
           this.text.sprite({flip:this.flip,x:this.r.x-this.a/2, y:this.r.y-this.b/2, i:0, j:3, scale: playerSize })
         }
-        else if (v.y < 100){
+        else if (this.v.y < 100){
           this.text.sprite({flip:this.flip,x:this.r.x-this.a/2, y:this.r.y-this.b/2, i:1, j:3, scale: playerSize })
         }
         else{
@@ -98,6 +126,8 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
           jump.play()
           this.v.y = -jumpSpeed - vodaJumpSpeed * Vol;
           this.walkState = 'air'
+          this.b = 395 * playerSize
+          this.r.y -= (395 - 332) * playerSize / 2
           keyState[' '] = true
           keyState['w'] = true
         }
@@ -153,9 +183,22 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
         if (this.v.x > 0) 
         { 
           if (this.walkState == 'air') {this.F.x = -acc*bremzair - Vol * vodaUpor * this.v.x}
-          else {this.F.x = -acc*bremz - Vol * vodaUpor * this.v.x}
+          else 
+          {
+            this.F.x = -acc*bremz - Vol * vodaUpor * this.v.x
+            if (!this.bremzani)
+            {
+              this.bremzani = true
+              this.bremzTime = Math.abs(this.v.x/this.F.x/5)
+              this.bremzFrame = 0;
+              this.bremzTimer = 0;
+            }
+          }
         }
-        else {this.F.x = -acc - Vol * vodaUpor * this.v.x} 
+        else {
+          this.F.x = -acc - Vol * vodaUpor * this.v.x
+          this.bremzani = false
+        } 
       }
       else if (keyStateoff['a'])  
       {
@@ -168,9 +211,21 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
         if (this.v.x < 0) 
         { 
           if (this.walkState == 'air') {this.F.x = acc*bremzair - Vol * vodaUpor * this.v.x }
-          else {this.F.x = acc*bremz - Vol * vodaUpor * this.v.x }
+          else {
+            this.F.x = acc*bremz - Vol * vodaUpor * this.v.x 
+            if (!this.bremzani)
+            {
+              this.bremzani = true
+              this.bremzTime = Math.abs(this.v.x/this.F.x/5)
+              this.bremzFrame = 0;
+              this.bremzTimer = 0;
+            }
+          }
         }
-        else {this.F.x = acc - Vol * vodaUpor * this.v.x}
+        else {
+          this.F.x = acc - Vol * vodaUpor * this.v.x
+          this.bremzani = false
+        }
       }
       else if (keyStateoff['d']) 
       {
@@ -185,7 +240,10 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
         if (!keysPressed['a'] && !keysPressed['d'])
         {
           if (Math.abs(this.v.x) < 20) { this.v.x = 0 }
-          else {this.v.x /= fric}
+          else {
+            this.v.x /= fric
+            this.bremzani = false
+          }
         }
       }
       else 

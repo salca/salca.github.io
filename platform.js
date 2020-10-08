@@ -51,6 +51,8 @@ function checkCollision(player){
          ( plat.r.x >= player.r.x + player.a/2 ))
       {
         player.walkState = 'air'
+        player.b = 395 * playerSize
+        player.r.y += (395 - 332) * playerSize / 2
         offEdgeJump = true
         continue
       }
@@ -68,6 +70,7 @@ function checkCollision(player){
         {
           //tla
           player.v.y = 0
+          player.b = 332 * playerSize
           player.r.y = plat.r.y - player.b/2
           player.walkState = i
         }
@@ -104,6 +107,7 @@ function checkCollision(player){
         {
           //tla
           player.v.y = 0
+          player.b = 332 * playerSize
           player.r.y = plat.r.y - player.b/2
           player.walkState = i
         } 
