@@ -80,10 +80,10 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
       }
       else 
       {
-        if (this.v.y < -200){
+        if (this.v.y < -300){
           this.text.sprite({flip:this.flip,x:this.r.x-this.a/2, y:this.r.y-this.b/2, i:0, j:3, scale: playerSize })
         }
-        else if (this.v.y < 100){
+        else if (this.v.y < 300){
           this.text.sprite({flip:this.flip,x:this.r.x-this.a/2, y:this.r.y-this.b/2, i:1, j:3, scale: playerSize })
         }
         else{
