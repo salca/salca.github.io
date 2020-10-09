@@ -73,6 +73,7 @@ function checkCollision(player){
           player.b = 332 * playerSize
           player.r.y = plat.r.y - player.b/2
           player.walkState = i
+          player.landingTimer =-0.01
         }
         else 
         {
@@ -110,6 +111,7 @@ function checkCollision(player){
           player.b = 332 * playerSize
           player.r.y = plat.r.y - player.b/2
           player.walkState = i
+          player.landingTimer =-0.01
         } 
         else 
         {

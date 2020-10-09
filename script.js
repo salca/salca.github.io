@@ -215,7 +215,7 @@ function draw(dt){
 
 function frame(dt){
   player.Jumpfunc(dt)
-  player.keyPress()
+  player.keyPress(dt)
   player.force(dt)
   player.move(dt)
   centerScreen(dt)
@@ -233,7 +233,6 @@ function frame(dt){
     checkCollision(enemies[i])
   }
   draw(dt)
-  // console.log(player.walkState)
 }
 
 let previousTime=0

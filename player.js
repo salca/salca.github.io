@@ -13,6 +13,10 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
     keysPressed[event.key] = false
     keyState[event.key] = false
     keyStateoff[event.key] = true
+    if (event.key == ' ' || event.key == 'w')
+    {
+      player.preJumpTimer = 0
+    }
   })
   let player = {
     r: r,
@@ -23,6 +27,8 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
     F: F,
     walkTimer : 0,
     walkFrame: 0,
+    preJumpTimer: 0,
+    landingTimer: 0,
     firstWalkFrame : false,
     fillColor: fillColor,
     edgeColor: edgeColor,
@@ -31,13 +37,35 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
     flip: false,
     bremzani: false,
     text: new textureAtlas(playertext,[new Array(8).fill(316),new Array(5).fill(285),new Array(3).fill(201),new Array(3).fill(201)], [341,341,314,395], [V(72,7).times(playerSize),V(97,7).times(playerSize),V(35,-18).times(playerSize),V(46,0).times(playerSize)]  ),
-
+    
     draw(dt){
-      this.r.subtract(V(this.a/2,this.b/2))
-      drawRectangle(this)
-      this.r.add(V(this.a/2,this.b/2))
+      // this.r.subtract(V(this.a/2,this.b/2))
+      // drawRectangle(this)
+      // this.r.add(V(this.a/2,this.b/2))
       if (this.walkState != 'air'){
-        if (this.bremzani)
+        if (this.preJumpTimer != 0)
+        {
+          this.text.sprite({flip:this.flip,x:this.r.x - this.a/2, y:this.r.y - this.b/2, i:0 , j:2 , scale: playerSize })   
+        }
+        else if (this.landingTimer != 0)
+        {
+          this.landingTimer += dt
+          if (this.landingTimer > 2/10)
+          {
+            this.landingTimer = 0
+            this.text.sprite({flip:this.flip,x:this.r.x - this.a/2, y:this.r.y - this.b/2, i:2 , j:2 , scale: playerSize })   
+          }
+          else if (this.landingTimer > 1/10)
+          {
+            this.text.sprite({flip:this.flip,x:this.r.x - this.a/2, y:this.r.y - this.b/2, i:2 , j:2 , scale: playerSize })   
+
+          }
+          else
+          {
+            this.text.sprite({flip:this.flip,x:this.r.x - this.a/2, y:this.r.y - this.b/2, i:1 , j:2 , scale: playerSize })   
+          }
+        }
+        else if (this.bremzani && this.bremzTime > 1/15)
         {
           this.bremzTimer += dt;
           if (this.bremzTimer >= this.bremzTime)
@@ -57,7 +85,7 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
           this.walkTimer = 0;
           this.firstWalkFrame = true;
         } 
-        else if (this.firstWalkFrame)
+        else if (Math.abs(this.v.x) < 75)
         {
           this.text.sprite({x:this.r.x - this.a/2, y:this.r.y - this.b/2, i:1, j:0, scale:playerSize, flip:this.flip})
           this.walkTimer += dt;
@@ -92,7 +120,6 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
         }
       }
 
-
     },
     move(dt){
       this.r.add(this.v.times(dt))
@@ -114,22 +141,27 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
       // this.F.x=0
     },
 
-    keyPress(){
+    keyPress(dt){
       Vol = CollisionWater(this);
       
       if (keysPressed['w'] || keysPressed[' '])
       { 
         if (this.walkState != 'air' && (!keyState[' '] || !keyState['w']))
         {
-          //skok
-          jump.restart() 
-          jump.play()
-          this.v.y = -jumpSpeed - vodaJumpSpeed * Vol;
-          this.walkState = 'air'
-          this.b = 395 * playerSize
-          this.r.y -= (395 - 332) * playerSize / 2
-          keyState[' '] = true
-          keyState['w'] = true
+          this.preJumpTimer += dt;
+          if (!(this.preJumpTimer < 1/10))
+          {
+            //skok
+            jump.restart() 
+            jump.play()
+            this.v.y = -jumpSpeed - vodaJumpSpeed * Vol;
+            this.walkState = 'air'
+            this.b = 395 * playerSize
+            this.r.y -= (395 - 332) * playerSize / 2
+            keyState[' '] = true
+            keyState['w'] = true
+            this.preJumpTimer = 0
+          }
         }
         else if (leftWallJump && (!keyState[' '] || !keyState['w']) )
         {
@@ -269,7 +301,7 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
       }
     },
     Jumpfunc(dt){
-      if ((keysPressed[' '] || keysPressed['w']) && (!keyState[' '] || !keyState['w']))
+      if ((keysPressed[' '] || keysPressed['w']) && (!keyState[' '] || !keyState['w']) && this.walkState == 'air')
       {
         JumpTimer += dt
         if (JumpTimer > jumpTime)
