@@ -34,10 +34,12 @@ const yparalask = 1
 const jumpTime = 0.2
 const offEdgeJumpTime = 0.2
 const tile = 30
+const xCamera = 100
+const yCamera = 200
 var inverseParalaksa = false
 var jumpState = 0
 var centerLoc = V(0,0)
-var playerPosold = V(0,0)
+var playerPosOld = V(0,0)
 var dr = V(0,0)
 var leftWallJump = false
 var rightWallJump = false
@@ -57,38 +59,47 @@ var water = []
 var backTiles = []
 
 
-function sumOfArray(arr,start,end){
+function sumOfArray(arr,start,end)
+{
   return arr.slice(start,end).reduce((a,b)=>a+b,0)
 }
 
-function sound(src) {
+function sound(src) 
+{
   this.sound = document.createElement("audio");
   this.sound.src = src;
   this.sound.setAttribute("preload", "auto");
   this.sound.setAttribute("controls", "none");
   this.sound.style.display = "none";
   document.body.appendChild(this.sound);
-  this.play = function(){
+  this.play = function()
+  {
     this.sound.play();
   }
-  this.stop = function(){
+  this.stop = function()
+  {
     this.sound.pause();
   }
-  this.loop = function(){
+  this.loop = function()
+  {
     this.sound.loop = true
   }
-  this.restart = function(){
+  this.restart = function()
+  {
     this.sound.currentTime = 0
   }
 }
 
 function drawFront(dt){
   for (i in frontPos) {
-    frontPos[i].add(V(dr.x*paralaksa[i],dr.y*paralaksa[i]*yparalask))
-    if (player.r.x - frontPos[i].x > background[i].width) {
-      frontPos[i].x += background[i].width}
-    else if (player.r.x - frontPos[i].x < 0) {
-      frontPos[i].x -= background[i].width
+    if ( !(Math.abs(playerScreenPos.x) < xCamera ) || !(Math.abs(playerScreenPos.y) < yCamera ) )
+    {
+      frontPos[i].add(V(dr.x*paralaksa[i],dr.y*paralaksa[i]*yparalask))
+      if (player.r.x - frontPos[i].x > background[i].width) {
+        frontPos[i].x += background[i].width}
+      else if (player.r.x - frontPos[i].x < 0) {
+        frontPos[i].x -= background[i].width
+      }
     }
     ctx.drawImage(background[i],frontPos[i].x,frontPos[i].y)
     ctx.drawImage(background[i],frontPos[i].x-background[i].width,frontPos[i].y)
@@ -98,11 +109,14 @@ function drawFront(dt){
 
 function drawBackground(dt){
   for (i in backgroundPos) {
-    backgroundPos[i].add(V(dr.x*paralaksa[i],dr.y*paralaksa[i]*yparalask))
-    if (player.r.x - backgroundPos[i].x > background[i].width) {
-      backgroundPos[i].x += background[i].width}
-    else if (player.r.x - backgroundPos[i].x < 0) {
-      backgroundPos[i].x -= background[i].width
+    if ( !(Math.abs(playerScreenPos.x) < xCamera ) || !(Math.abs(playerScreenPos.y) < yCamera ) )
+    {
+      backgroundPos[i].add(V(dr.x*paralaksa[i],dr.y*paralaksa[i]*yparalask))
+      if (player.r.x - backgroundPos[i].x > background[i].width) {
+        backgroundPos[i].x += background[i].width}
+      else if (player.r.x - backgroundPos[i].x < 0) {
+        backgroundPos[i].x -= background[i].width
+      }
     }
     ctx.drawImage(background[i],backgroundPos[i].x,backgroundPos[i].y)
     ctx.drawImage(background[i],backgroundPos[i].x-background[i].width,backgroundPos[i].y)
@@ -143,12 +157,19 @@ function checkCollisonbool(){
 //   centerLoc.add(player.v.times(dt))
 // }
 
-function centerScreen(dt){
-  dr = V(player.r.x - width/2 - centerLoc.x, player.r.y - height/2 - centerLoc.y)
-  ctx.translate(-dr.x, -dr.y)
-  centerLoc.x = player.r.x - width/2
-  centerLoc.y = player.r.y - height/2
-
+function centerScreen()
+{
+  playerScreenPos = V(player.r.x - width/2 - centerLoc.x, player.r.y - height/2 - centerLoc.y)
+  dr = player.r.minus(playerPosOld)
+  
+  // console.log(centerLoc, dr)
+  if ( !(Math.abs(playerScreenPos.x) < xCamera ) || !(Math.abs(playerScreenPos.y) < yCamera ) )
+  {
+    ctx.translate(-dr.x, -dr.y)
+    centerLoc.add(dr)
+  }
+  playerPosOld.x = player.r.x
+  playerPosOld.y = player.r.y
 }
 
 function mod(a,n){
@@ -316,6 +337,8 @@ function setupLevel(){
 
 function setup(){
   player = createPlayer({r:V(width/2,height/2 - 200),fillColor:'black'})
+  playerPosOld.x = player.r.x
+  playerPosOld.y = player.r.y
   setupImages()
   setupLevel()
   setupSound()
