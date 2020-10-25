@@ -5,6 +5,8 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
   var keyState = {}
   var keyStateoff = {}
 
+
+
   document.addEventListener('keydown', (event) => {
     keysPressed[event.key] = true
   })

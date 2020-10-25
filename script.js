@@ -23,7 +23,8 @@ const jumpg = 700
 const jumpSpeed = 500
 const vodaJumpSpeed = -0.05
 const fric = 1.025
-const playerSize = 0.5
+const playerSize = 0.2
+const handSize = 0.5
 const walkAniSpeed = 12
 const vzgon = 0.5;
 const vodaUpor = 0.0008;
@@ -58,6 +59,8 @@ var enemies = []
 var water = []
 var backTiles = []
 
+var rx = 0
+var ry = 0
 
 function sumOfArray(arr,start,end)
 {
@@ -92,14 +95,18 @@ function sound(src)
 
 function drawFront(dt){
   for (i in frontPos) {
-    if ( !(Math.abs(playerScreenPos.x) < xCamera ) || !(Math.abs(playerScreenPos.y) < yCamera ) )
+    if (!(Math.abs(playerScreenPos.x) < xCamera ))
     {
-      frontPos[i].add(V(dr.x*paralaksa[i],dr.y*paralaksa[i]*yparalask))
+      frontPos[i].add(V(dr.x*paralaksa[i],0))
       if (player.r.x - frontPos[i].x > background[i].width) {
         frontPos[i].x += background[i].width}
       else if (player.r.x - frontPos[i].x < 0) {
         frontPos[i].x -= background[i].width
       }
+    }
+    if (!(Math.abs(playerScreenPos.y) < yCamera ))
+    {
+      frontPos[i].add(V(0,dr.y*paralaksa[i]*yparalask))
     }
     ctx.drawImage(background[i],frontPos[i].x,frontPos[i].y)
     ctx.drawImage(background[i],frontPos[i].x-background[i].width,frontPos[i].y)
@@ -109,14 +116,18 @@ function drawFront(dt){
 
 function drawBackground(dt){
   for (i in backgroundPos) {
-    if ( !(Math.abs(playerScreenPos.x) < xCamera ) || !(Math.abs(playerScreenPos.y) < yCamera ) )
+    if (!(Math.abs(playerScreenPos.x) < xCamera ))
     {
-      backgroundPos[i].add(V(dr.x*paralaksa[i],dr.y*paralaksa[i]*yparalask))
+      backgroundPos[i].add(V(dr.x*paralaksa[i],0))
       if (player.r.x - backgroundPos[i].x > background[i].width) {
         backgroundPos[i].x += background[i].width}
       else if (player.r.x - backgroundPos[i].x < 0) {
         backgroundPos[i].x -= background[i].width
       }
+    }
+    if (!(Math.abs(playerScreenPos.y) < yCamera ))
+    {
+      backgroundPos[i].add(V(0,dr.y*paralaksa[i]*yparalask))
     }
     ctx.drawImage(background[i],backgroundPos[i].x,backgroundPos[i].y)
     ctx.drawImage(background[i],backgroundPos[i].x-background[i].width,backgroundPos[i].y)
@@ -162,15 +173,19 @@ function centerScreen()
   playerScreenPos = V(player.r.x - width/2 - centerLoc.x, player.r.y - height/2 - centerLoc.y)
   dr = player.r.minus(playerPosOld)
   
-  // console.log(centerLoc, dr)
-  if ( !(Math.abs(playerScreenPos.x) < xCamera ) || !(Math.abs(playerScreenPos.y) < yCamera ) )
+  if (!(Math.abs(playerScreenPos.x) < xCamera ))
   {
-    ctx.translate(-dr.x, -dr.y)
-    centerLoc.add(dr)
+    ctx.translate(-dr.x,0)
+    centerLoc.x += dr.x
+  }
+  if (!(Math.abs(playerScreenPos.y) < yCamera ))
+  {
+  ctx.translate(0,-dr.y)
+  centerLoc.y += dr.y
   }
   playerPosOld.x = player.r.x
   playerPosOld.y = player.r.y
-}
+  }
 
 function mod(a,n){
   return (a%n>=0) ? a%n : a%n + n
@@ -229,7 +244,7 @@ function draw(dt){
   for (i in water){
     water[i].draw();
   }
-  // drawFront(dt)
+  drawFront(dt)
 }
 
 
@@ -241,6 +256,7 @@ function frame(dt){
   player.move(dt)
   centerScreen(dt)
   player.duck()
+  hand.move(dt)
   for (i in enemies){
     if (enemies[i].dead) {continue}
     enemies[i].force(dt)
@@ -255,7 +271,6 @@ function frame(dt){
   }
   draw(dt)
 }
-
 let previousTime=0
 function animate(){
   let now = performance.now()
@@ -342,7 +357,7 @@ function setup(){
   setupImages()
   setupLevel()
   setupSound()
-  hand = new Hand(handtext,60,59)
+  hand = new Hand(handtext,60*handSize,59*handSize)
   // enemies.push( createEnemy({texture: enemy,r:V(500,500), a:110,b:80,v:V(100,0)}) )
   // enemies.push( createEnemy({texture: enemy,r:V(400,500), a:110,b:80,v:V(100,0),flying : true}) )
 }
