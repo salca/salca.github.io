@@ -39,7 +39,8 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
     flip: false,
     bremzani: false,
     text: new textureAtlas(playertext,[new Array(8).fill(316),new Array(5).fill(285),new Array(3).fill(201),new Array(3).fill(201)], [341,341,314,395], [V(72,7).times(playerSize),V(97,7).times(playerSize),V(35,-18).times(playerSize),V(46,0).times(playerSize)]  ),
-    
+    text2: new textureAtlas(playertext2, new Array(4).fill(182), 316),
+
     draw(dt){
       // this.r.subtract(V(this.a/2,this.b/2))
       // drawRectangle(this)
@@ -105,7 +106,8 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
             this.walkFrame += 1;
             this.walkTimer = 0;
           }
-          this.text.sprite({flip:this.flip,x:this.r.x - this.a/2, y:this.r.y - this.b/2, i:this.walkFrame % 6 + 2 , j:0 , scale: playerSize })
+          // this.text.sprite({flip:this.flip,x:this.r.x - this.a/2, y:this.r.y - this.b/2, i:this.walkFrame % 6 + 2 , j:0 , scale: playerSize })
+          this.text2.sprite({flip:!this.flip,x:this.r.x - this.a/2, y:this.r.y - this.b/2, i:this.walkFrame % 2 + 1 , j:0 , scale: playerSize })
         }
       }
       else 
@@ -121,7 +123,6 @@ function createPlayer({r,a,b,v=V(0,0),F=V(0,0),m=1,fillColor='red',edgeColor='bl
 
         }
       }
-
     },
     move(dt){
       this.r.add(this.v.times(dt))

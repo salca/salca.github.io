@@ -313,6 +313,7 @@ function setupImages(){
   handtext=document.getElementById('hand')
   zid1=document.getElementById('zid1')
   playertext=document.getElementById('playertext')
+  playertext2=document.getElementById('playertext')
 
 
   if (!inverseParalaksa){
