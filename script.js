@@ -232,10 +232,10 @@ function draw(dt){
   for (i in backTiles){
     backTiles[i].draw()
   }
-  hand.draw()
+  // hand.draw()
   for (i in enemies){
     if (enemies[i].dead) {continue}
-    enemies[i].draw()
+    enemies[i].draw(dt)
   }
   for (i in plats){
     plats[i].drawPlatform()
@@ -256,7 +256,7 @@ function frame(dt){
   player.move(dt)
   centerScreen(dt)
   player.duck()
-  hand.move(dt)
+  // hand.move(dt)
   for (i in enemies){
     if (enemies[i].dead) {continue}
     enemies[i].force(dt)
@@ -313,7 +313,7 @@ function setupImages(){
   handtext=document.getElementById('hand')
   zid1=document.getElementById('zid1')
   playertext=document.getElementById('playertext')
-  playertext2=document.getElementById('playertext')
+  enemytext2=document.getElementById('enemy2')
 
 
   if (!inverseParalaksa){
@@ -358,9 +358,9 @@ function setup(){
   setupImages()
   setupLevel()
   setupSound()
-  hand = new Hand(handtext,60*handSize,59*handSize)
-  // enemies.push( createEnemy({texture: enemy,r:V(500,500), a:110,b:80,v:V(100,0)}) )
-  // enemies.push( createEnemy({texture: enemy,r:V(400,500), a:110,b:80,v:V(100,0),flying : true}) )
+  // hand = new Hand(handtext,60*handSize,59*handSize)
+  enemies.push( createEnemy2({texture: enemytext2,r:V(500,500), a:182,b:316,v:V(100,0)}) )
+  enemies.push( createEnemy2({texture: enemytext2,r:V(400,500), a:110,b:80,v:V(100,0),flying : true}) )
 }
 
 
